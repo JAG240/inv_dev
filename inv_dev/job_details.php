@@ -15,6 +15,22 @@ if(isset($_POST['con']))
 	$addRun->execute();
 	$addRun->close();
 }
+
+if(isset($_POST['cont_id']))
+{
+	$addSQL = "insert into job_transfer(job_id, cont_id, weight, trans_date) values (?, ?, ?, curdate());";
+	$addRun = $db->prepare($addSQL);
+	$addRun->bind_param("iii", $id, $_POST['cont_id'], $_POST['weight']);
+	$addRun->execute();
+	if($addRun)
+	{
+		echo "<i>Successfully transferred: " . $_POST['weight'] . "lbs to container " . $_POST['cont_id'] . "</i>";
+	}
+	else
+	{
+		echo "<i>An error occured during job_transfer</i>";
+	}
+}
 ?>
 <html lang="en">
 <head>

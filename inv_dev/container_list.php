@@ -21,18 +21,23 @@ if(isset($_POST['mat']))
 
 <body>
 <table>
-<tr><th>Container ID</th><th>Material</th><th>Date Created</th></tr>
+<tr><th>Container ID</th><th>Material</th><th>Date Created</th><th>Disposition</th></tr>
 <?php
-$SQL = "select container.id, material.name, container.created from container, material where container.mat_id = material.id;";
+$SQL = "select container.id, material.name, container.created, disposition.name 
+		from container, material, disposition 
+		where container.mat_id = material.id
+		and container.disp_id = disposition.id
+		order by disp_id asc;";
 $run = $db->prepare($SQL);
 $run->execute();
 $run->store_result();
-$run->bind_result($i, $n, $c);
+$run->bind_result($i, $n, $c, $d);
 while($run->fetch())
 {
 	echo "<tr><td><a href=\"container_details.php/?id=" . $i ."\">" . $i . 
 		 "</a></td><td>" . $n . 
 		 "</td><td>" . $c . 
+		 "</td><td>" . $d .
 		 "</td></tr>";
 }
 $run->close();
