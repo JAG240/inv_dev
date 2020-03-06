@@ -1,0 +1,52 @@
+.navbar ul
+{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.navbar li 
+{
+	display: inline;
+}
+
+.navbar img
+{
+	height: 3.5em;
+	width: 6.5em;
+}
+
+.navbar
+{
+	text-align: center;
+	background-color: #DFDFDF;
+}
+
+body
+{
+	text-align: center;
+}
+
+ul
+{
+	text-align: center;
+	list-style-type: none;
+	padding: 0;
+}
+
+il
+{
+	text-align: center;
+	padding: 0;
+	text-align: center;
+}
+
+table
+{
+	margin-left: auto;
+	margin-right: auto;
+}
+tr, th, td
+{
+	text-align: center;
+}
