@@ -30,6 +30,8 @@ while($cRun->fetch())
 $cRun->close();
 ?>
 </select><br>
+Enter the Quantity: <br>
+<input type="number" name="quantity"><br>
 Enter the Weight: <br>
 <input type="number" name="weight" step="0.01" required><br>
 <br><input type="submit">

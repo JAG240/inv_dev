@@ -6,6 +6,36 @@ $job_weight = 0;
 $job_quantity = 0;
 $cont_weight = 0;
 $cont_quantity = 0;
+$out_weight = 0;
+$out_quant = 0;
+?>
+<?php
+if(isset($_POST['dest_id']))
+{
+	$addSQL = "insert into cont_transfer(source_cont, dest_cont, quantity, weight, trans_date) values (?, ?, ?, ?, curdate());";
+	$addRun = $db->prepare($addSQL);
+	$addRun->bind_param("iiii", $id, $_POST['dest_id'], $_POST['quantity'], $_POST['weight']);
+	$addRun->execute();
+	if($addRun)
+	{
+		echo "<i>Sucessfully transferred " . $_POST['weight'] . " lbs from " . $id . " to " . $_POST['dest_id'] . "</i>";
+	}
+	else
+	{
+		echo "<i>Failed to complete a transfer</i>";
+	}
+	$addRun->close();
+}
+?>
+<?php
+if(isset($_GET['action']) && $_GET['action'] == 1)
+{
+	$clSQL = "update container set disp_id = 2 where id = ?;";
+	$clRun = $db->prepare($clSQL);
+	$clRun->bind_param("i", $id);
+	$clRun->execute();
+	$clRun->close();
+}
 ?>
 <html lang="en">
 <head>
@@ -71,7 +101,7 @@ $tRun->close();
 </table>
 <br>
 <table>
-<h3>Transfers from Containers</h3>
+<h3>Transfers from Other Containers</h3>
 <tr><th>Source Container</th><th>Quantity</th><th>Date Transferred</th><th>Weight</th></tr>
 <?php
 $cSQL = "select source_cont, quantity, weight, trans_date from cont_transfer where dest_cont = ?;";
@@ -94,6 +124,34 @@ $cRun->close();
 <tr><td></td><td><?php echo $cont_quantity; ?></td><td></td><td><?php echo $cont_weight; ?></td></tr>
 </table>
 <br>
+<table>
+<h3>Transfers out of this Container</h3>
+<tr><th>Destination Container</th><th>Quantity</th><th>Transfer Date</th><th>Weight</th></tr>
+<?php
+$tranSQL = "select dest_cont, quantity, weight, trans_date from cont_transfer where source_cont = ?;";
+$tranRun = $db->prepare($tranSQL);
+$tranRun->bind_param("i", $id);
+$tranRun->execute();
+$tranRun->bind_result($dc, $qu, $we, $trd);
+while($tranRun->fetch())
+{
+	echo "<tr><td><a href=\"../container_details.php/?id=" . $dc . "\">" . $dc . 
+		 "</a></td><td>" . $qu . 
+		 "</td><td>" . $trd . 
+		 "</td><td>" . $we . 
+		 "</td></tr>";
+	$out_weight += $we;
+	$out_quant += $qu;
+}
+$tranRun->close();
+?>
+<tr><td></td><td><?php echo $out_quant ?></td><td></td><td><?php echo $out_weight ?></td></tr>
+</table>
+<br>
+<?php 
+echo "<h4>Current Weight: " . ($cont_weight + $job_weight - $out_weight) . "</h4>";
+echo "<h4>Current Quantity: " . ($cont_quantity +  $job_quantity - $out_quant) . "</h4>";
+?>
 <br><a href="../container_list.php"><button type="button">Container List</button></a>
 <?php 
 $checkSQL = "select disp_id, class from container, material
@@ -107,10 +165,25 @@ while($checkRun->fetch())
 {
 	if($di == 1 && $cl == 2)
 	{
-		echo " <a href=\"../cont_transfer_form.php/?id=" . $id . "\"> <button type=\"button\">Transfer Material to Another Container</button></a>";
+		echo " <a href=\"../cont_transfer_form.php/?id=" . $id . "\"> <button type=\"button\">Transfer Material to Another Container</button></a>"; 
 	}
 }
+$checkRun->close();
 ?> 
+<?php
+$closeSQL = "select disp_id from container where id = ?;";
+$closeRun = $db->prepare($closeSQL);
+$closeRun->bind_param("i", $id);
+$closeRun->execute();
+$closeRun->bind_result($cld);
+while($closeRun->fetch())
+{
+	if($cld == 1)
+	{
+		echo " <a href=\"../container_details/?id=" . $id . "&action=1\"> <button type=\"button\">Close This Container</button></a>";
+	}
+}
+?>
 </body>
 </html>
 

@@ -18,9 +18,9 @@ if(isset($_POST['con']))
 
 if(isset($_POST['cont_id']))
 {
-	$addSQL = "insert into job_transfer(job_id, cont_id, weight, trans_date) values (?, ?, ?, curdate());";
+	$addSQL = "insert into job_transfer(job_id, cont_id, weight, quantity, trans_date) values (?, ?, ?, ?, curdate());";
 	$addRun = $db->prepare($addSQL);
-	$addRun->bind_param("iii", $id, $_POST['cont_id'], $_POST['weight']);
+	$addRun->bind_param("iiii", $id, $_POST['cont_id'], $_POST['weight'], $_POST['quantity']);
 	$addRun->execute();
 	if($addRun)
 	{
