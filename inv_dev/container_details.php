@@ -37,6 +37,28 @@ if(isset($_GET['action']) && $_GET['action'] == 1)
 	$clRun->close();
 }
 ?>
+<?php
+if(isset($_POST['model']))
+{
+	for($x = 0; $_POST['num'] > $x; $x++)
+	{
+		if(!empty($_POST['dev' . $x]))
+		{
+			$devSQL = "insert into device(serial, type_id, model_id, rec_date, location_id, disp_id) values (?, ?, ?, curdate(), 5, 3)";
+			$devRun = $db->prepare($devSQL);
+			$devRun->bind_param("sii", $_POST['dev' . $x], $_POST['type'], $_POST['model']);
+			$devRun->execute();
+			$devRun->close();
+			
+			$contSQL = "insert into dev_cont(dev_serial, cont_id, trans_date) values (?, ?, curdate());";
+			$contRun = $db->prepare($contSQL);
+			$contRun->bind_param("si", $_POST['dev' . $x], $id);
+			$contRun->execute();
+			$contRun->close();
+		}
+	}
+}
+?>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -86,7 +108,7 @@ $tRun->store_result();
 $tRun->bind_result($td, $tq, $ji, $cn, $tw);
 while($tRun->fetch())
 {
-	echo "<tr><td>" . $ji .
+	echo "<tr><td><a href=\"../job_details.php/?id=" . $ji . "\">" . $ji .
 		 "</td><td>" . $cn . 
 		 "</td><td>" . $tq .
 		 "</td><td>" . $td . 
@@ -183,6 +205,20 @@ while($closeRun->fetch())
 		echo " <a href=\"../container_details/?id=" . $id . "&action=1\"> <button type=\"button\">Close This Container</button></a>";
 	}
 }
+?>
+<br>
+<br><?php echo " <a href=\"../cont_add_device.php/?id=" . $id . "\"> <button type=\"button\">Add Devices</button></a>"; ?>
+<?php
+$devchSQL = "select id from dev_cont where cont_id = ?;";
+$devch = $db->prepare($devchSQL);
+$devch->bind_param("i", $id);
+$devch->execute();
+$devch->store_result();
+if($devch->num_rows > 0)
+{
+	echo " <a href=\"../container_devices.php/?id=". $id . "\"> <button type=\"button\">Devices in this Container</button></a>";
+}
+$devch->close();
 ?>
 </body>
 </html>

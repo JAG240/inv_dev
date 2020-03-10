@@ -70,6 +70,26 @@ while($jRun->fetch())
 $jRun->close();
 ?>
 </table>
+<br>
+<table>
+<tr><th>Container ID</th><th>Quantity</th><th>Weight</th><th>Transfer Date</th></tr>
+<?php
+$tSQL = "select cont_id, quantity, weight, trans_date from job_transfer where job_id = ?;";
+$tRun = $db->prepare($tSQL);
+$tRun->bind_param("i", $id);
+$tRun->execute();
+$tRun->bind_result($ci, $cq, $cw, $cd);
+while($tRun->fetch())
+{
+	echo "<tr><td><a href=\"../container_details.php/?id=" .$ci . "\">" . $ci . 
+		 "</a></td><td>" . $cq . 
+		 "</td><td>" . $cw . 
+		 "</td><td>" . $cd . 
+		 "</td></tr>";
+}
+$tRun->close();
+?>
+</table>
 <br><a href="../job_list.php"><button type="button">Back</button></a>
 <?php echo " <a href=\"../DPUL.php/?id=" . $id ."\"> <button type=\"button\">Create DPUL for this Job</button></a> "; ?>
 <?php echo " <a href=\"../transfer_form.php/?id=" . $id . "\"> <button type=\"button\">Transfer Material to Container</button></a> "; ?>

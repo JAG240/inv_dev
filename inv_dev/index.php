@@ -14,5 +14,6 @@ include_once("navbar.html");
 <a href="quotes.php">Quotes</a><br>
 <a href="jobs.php">Jobs</a><br>
 <a href="containers.php">Containers</a><br>
+<a href="devices.php">Devices</a><br>
 </body>
 </html>
