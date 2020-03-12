@@ -44,7 +44,7 @@ if(isset($_POST['model']))
 	{
 		if(!empty($_POST['dev' . $x]))
 		{
-			$devSQL = "insert into device(serial, type_id, model_id, rec_date, location_id, disp_id) values (?, ?, ?, curdate(), 5, 3)";
+			$devSQL = "insert into device(serial, type_id, model_id, rec_date, location_id, disp_id, condition_id) values (?, ?, ?, curdate(), 5, 3, 2)";
 			$devRun = $db->prepare($devSQL);
 			$devRun->bind_param("sii", $_POST['dev' . $x], $_POST['type'], $_POST['model']);
 			$devRun->execute();
@@ -56,6 +56,24 @@ if(isset($_POST['model']))
 			$contRun->execute();
 			$contRun->close();
 		}
+	}
+}
+?>
+<?php
+if(isset($_POST['count']))
+{
+	for($y = 0;$_POST['count'] > $y; $y++)
+	{
+		$sql = "update device set  location_id = ? where serial = ?;";
+		$run = $db->prepare($sql);
+		$run->bind_param("is", $_POST['h_disp' . $y], $_POST['hdd' . $y]);
+		$run->execute();
+		$run->close();
+		
+		$run = $db->prepare($sql);
+		$run->bind_param("is", $_POST['d_disp' . $y], $_POST['dev' . $y]);
+		$run->execute();
+		$run->close();
 	}
 }
 ?>
@@ -203,11 +221,11 @@ while($closeRun->fetch())
 	if($cld == 1)
 	{
 		echo " <a href=\"../container_details/?id=" . $id . "&action=1\"> <button type=\"button\">Close This Container</button></a>";
+		echo "<br><br> <a href=\"../cont_add_device.php/?id=" . $id . "\"> <button type=\"button\">Add Devices</button></a>";
+		echo " <a href=\"../cont_add_hard_drive.php/?id=" .$id . "\"> <button type=\"button\">Receive Hard Drives</button></a>";
 	}
-}
+}$closeRun->close();
 ?>
-<br>
-<br><?php echo " <a href=\"../cont_add_device.php/?id=" . $id . "\"> <button type=\"button\">Add Devices</button></a>"; ?>
 <?php
 $devchSQL = "select id from dev_cont where cont_id = ?;";
 $devch = $db->prepare($devchSQL);

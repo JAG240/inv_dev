@@ -13,7 +13,7 @@ $id = $_GET['id'];
 <body>
 <table>
 <?php
-$sql = "select serial, parent_serial, rec_date, grade, dev_type.name, model.name, station, disposition.name
+$sql = "select serial, rec_date, grade, dev_type.name, model.name, station, disposition.name
 		from device, dev_condition, dev_type, model, location, disposition
 		where type_id = dev_type.id
 		and model_id = model.id
@@ -24,11 +24,10 @@ $sql = "select serial, parent_serial, rec_date, grade, dev_type.name, model.name
 $run = $db->prepare($sql);
 $run->bind_param("s", $id);
 $run->execute();
-$run->bind_result($s, $ps, $r, $g, $t, $m, $st, $d);
+$run->bind_result($s, $r, $g, $t, $m, $st, $d);
 while($run->fetch())
 {
 	echo "<tr><th>Serial #</th><td>" . $s . "</td></tr>" .
-		 "<tr><th>Parent Serial #</th><td>" . $ps . "</td></tr>" .
 		 "<tr><th>Date Recieved</th><td>" . $r . "</td></tr>" .
 		 "<tr><th>Condition</th><td>" . $g . "</td></tr>" .
 		 "<tr><th>Device Type</th><td>" . $t . "</td></tr>" .
@@ -75,6 +74,21 @@ while($custRun->fetch())
 		 "<tr><th>Job Pickup Date</th><td>" . $jd . "</td></tr>";
 }
 $custRun->close();
+
+$parSQL = "select parent_serial from device where serial = ?;";
+$parRun = $db->prepare($parSQL);
+$parRun->bind_param("s", $id);
+$parRun->execute();
+$parRun->store_result();
+$parRun->bind_result($par);
+while($parRun->fetch())
+{
+	if(!empty($par))
+	{
+		echo "<tr><th>Parent Device</th><td><a href=\"../device_details.php/?id=" . $par . "\">" . $par . "</a></td></tr>";
+	}
+}
+$parRun->close();
 ?>
 </table>
 <br><a href="../device_list.php"><button type="button">Back</button></a>
