@@ -30,7 +30,54 @@ while($run->fetch())
 		 "<tr><th>Device Type</th><td>" . $t . "</td></tr>" . 
 		 "<tr><th>Condition</th><td>" . $g . "</td></tr>";
 }
+$run->close();
+
+$cSQL = "select cpu.model, cpu.clock_speed from device, cpu where device.cpu_id = cpu.id and serial = ?;";
+$cRun = $db->prepare($cSQL);
+$cRun->bind_param("s", $id);
+$cRun->execute();
+$cRun->store_result();
+$cRun->bind_result($cm, $cc);
+if($cRun->num_rows > 0)
+{
+	while($cRun->fetch())
+	{
+		echo "<tr><th>CPU Model</th><td>" . $cm . "</td></tr>" .
+			 "<tr><th>Clock Speed</th><td>" . $cc . "</td></tr>";
+	}
+}
+$cRun->close();
+
+$oSQL = "select mar, name, date_issued from os where dev_serial = ?;";
+$oRun = $db->prepare($oSQL);
+$oRun->bind_param("s", $id);
+$oRun->execute();
+$oRun->store_result();
+$oRun->bind_result($om, $on, $od);
+if($oRun->num_rows > 0)
+{
+	while($oRun->fetch())
+	{
+		echo "<tr><th>OS MAR</th><td>" . $om . "</td></tr>" . 
+			 "<tr><th>OS</th><td>" . $on . "</td></tr>" . 
+			 "<tr><th>Date OS issued</th><td>" . $od . "</td></tr>";
+	}
+}
+$oRun->close();
 ?>
-</table>
+</table><br>
+<br><a href="../ebay_dev_list.php"><button type="button">Back</button></a>
+<?php
+$osSQL = "select mar from os where dev_serial = ?;";
+$osRun = $db->prepare($osSQL);
+$osRun->bind_param("s", $id);
+$osRun->execute();
+$osRun->store_result();
+if($osRun->num_rows == 0)
+{
+	echo "<a href=\"../issue_os.php/?id=". $id . "\"><button type=\"button\">Issue OS</button></a>";
+}
+$osRun->close();
+?>
 </body>
 </html>

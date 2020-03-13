@@ -61,7 +61,22 @@ while($run->fetch())
 }
 $run->close();
 
+echo "</select><br>Enter the CPU: <br>";
+
+echo "<select name=\"cpu\">";
+$cSQL = " select id, model, clock_speed from cpu;";
+$cRun = $db->prepare($cSQL);
+$cRun->execute();
+$cRun->bind_result($ci, $cm, $cs);
+while($cRun->fetch())
+{
+	echo "<option value=\"" . $id . "\">" . $cm . " @ " . $cs . "GHz" . "</option>";
+}
+$cRun->close();
+
 echo "</select><br>";
+
+echo "Enter the amount of RAM in GB: <br> <input type=\"number\" name=\"ram\"><br>";
 
 for($y = 0; $count > $y; $y++)
 {

@@ -89,6 +89,22 @@ while($parRun->fetch())
 	}
 }
 $parRun->close();
+
+$childSQL = "select serial from device where parent_serial = ?;";
+$childRun = $db->prepare($childSQL);
+$childRun->bind_param("s", $id);
+$childRun->execute();
+$childRun->store_result();
+$childRun->bind_result($child);
+if($childRun->num_rows > 0)
+{
+	while($childRun->fetch())
+	{
+		echo "<tr><th>Child Device</th><td><a href=\"../device_details.php/?id=" . $child . "\">" . $child . "</a></td></tr>";
+	}
+}
+$childRun->close();
+
 ?>
 </table>
 <br><a href="../device_list.php"><button type="button">Back</button></a>

@@ -70,10 +70,13 @@ if(isset($_POST['count']))
 		$run->execute();
 		$run->close();
 		
-		$run = $db->prepare($sql);
-		$run->bind_param("is", $_POST['d_disp' . $y], $_POST['dev' . $y]);
+		$sql2 = "update device set  location_id = ?, cpu_id = ?, ram = ? where serial = ?;";
+		$run = $db->prepare($sql2);
+		$run->bind_param("iiis", $_POST['d_disp' . $y], $_POST['cpu' . $y], $_POST['ram' . $y], $_POST['dev' . $y]);
 		$run->execute();
 		$run->close();
+		
+		
 	}
 }
 ?>

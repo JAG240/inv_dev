@@ -13,10 +13,12 @@ $id = $_GET['id'];
 <body>
 <form method="POST" action="../container_details.php/?id=<?php echo $id; ?>">
 <table>
-<tr><th>Device Serial</th><th>Device Location</th><th>Hard Drive Serial</th><th>Hard Drive Location</th></tr>
+<tr><th>Device Serial</th><th>Device Location</th><th>Hard Drive Serial</th><th>Hard Drive Location</th><th>CPU</th><th>RAM</th></tr>
 <?php
 for($x = 0; $_POST['count'] > $x; $x++)
 {
+	if(!empty($_POST['hdd' . $x]))
+	{
 	echo "<tr><td>" . $_POST['dev' . $x] . "</td><td>" .
 		 "<select name=\"d_disp" . $x . "\">";
 	
@@ -42,9 +44,27 @@ for($x = 0; $_POST['count'] > $x; $x++)
 	}
 	$run->close(); 
 	
-	echo "</select></td></tr>";
+	echo "</select></td>";
+	
+	echo "</td><td>" . "<select name=\"cpu" . $x . "\">";
+	
+	$cSQL = "select id, model, clock_speed from cpu;";
+	$cRun = $db->prepare($cSQL);
+	$cRun->execute();
+	$cRun->bind_result($ci, $cm, $cs);
+	while($cRun->fetch())
+	{
+		echo "<option value=\"" . $ci . "\""; if($ci == $_POST['cpu']){echo "selected";} echo ">" .$cm . " @ " . $cs . " GHz" ."</option>";
+	}
+	$cRun->close();
+	
+	echo "</select></td>";
+	
+	echo "<td><input type=\"number\" value=\"" . $_POST['ram'] . "\" name=\"ram" . $x . "\"></td></tr>";
+	
 	echo "<input type=\"hidden\" value=\"" . $_POST['hdd' . $x] . "\" name=\"hdd" . $x . "\">";
 	echo "<input type=\"hidden\" value=\"" .  $_POST['dev' . $x] . "\" name=\"dev" . $x . "\">";
+	}
 }
 ?>
 </table><br>
