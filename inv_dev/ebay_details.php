@@ -3,32 +3,50 @@ require "db.php";
 include_once("navbar2.html");
 $id = $_GET['id'];
 ?>
+<?php
+if(isset($_POST['mar']))
+{
+$osSQL = "insert into os(mar, dev_serial, name, date_issued) values (?, ?, ?, curdate());";
+$osRun = $db->prepare($osSQL);
+$osRun->bind_param("sss", $_POST['mar'], $id, $_POST['name']);
+$osRun->execute();
+$osRun->close();
+}
+?>
+<?php
+if(isset($_POST['newDisp']))
+{
+$di = "update device set disp_id = ? where serial = ?;";
+$run = $db->prepare($di);
+$run->bind_param("is", $_POST['newDisp'], $id);
+$run->execute();
+$run->close();
+}
+?>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="../style.css">
-  <title>Ebay- Device Details</title>
+  <title>Ebay Device Details</title>
 </head>
 
 <body>
 <table>
 <?php
-$sql = "select serial, rec_date, model.name, dev_type.name, grade from device, dev_type, dev_condition, model
+$sql = "select serial, rec_date, model.name, dev_type.name from device, dev_type, model
 		where type_id = dev_type.id
-		and condition_id = dev_condition.id
 		and model_id = model.id
 		and serial = ?;";
 $run = $db->prepare($sql);
 $run->bind_param("s", $id);
 $run->execute();
-$run->bind_result($s, $r, $m, $t, $g);
+$run->bind_result($s, $r, $m, $t);
 while($run->fetch())
 {
 	echo "<tr><th>Device Serial</th><td>" . $s . "</td></tr>" .
 		 "<tr><th>Date Received</th><td>" . $r . "</td></tr>" . 
 		 "<tr><th>Model</th><td>" . $m . "</td></tr>" . 
-		 "<tr><th>Device Type</th><td>" . $t . "</td></tr>" . 
-		 "<tr><th>Condition</th><td>" . $g . "</td></tr>";
+		 "<tr><th>Device Type</th><td>" . $t . "</td></tr>";
 }
 $run->close();
 
@@ -67,6 +85,7 @@ $oRun->close();
 ?>
 </table><br>
 <br><a href="../ebay_dev_list.php"><button type="button">Back</button></a>
+ <a href="../ebay_disp_change.php/?id=<?php echo $id; ?>"><button type="button">Change Disposition</button></a>
 <?php
 $osSQL = "select mar from os where dev_serial = ?;";
 $osRun = $db->prepare($osSQL);

@@ -38,28 +38,6 @@ if(isset($_GET['action']) && $_GET['action'] == 1)
 }
 ?>
 <?php
-if(isset($_POST['model']))
-{
-	for($x = 0; $_POST['num'] > $x; $x++)
-	{
-		if(!empty($_POST['dev' . $x]))
-		{
-			$devSQL = "insert into device(serial, type_id, model_id, rec_date, location_id, disp_id, condition_id) values (?, ?, ?, curdate(), 5, 3, 2)";
-			$devRun = $db->prepare($devSQL);
-			$devRun->bind_param("sii", $_POST['dev' . $x], $_POST['type'], $_POST['model']);
-			$devRun->execute();
-			$devRun->close();
-			
-			$contSQL = "insert into dev_cont(dev_serial, cont_id, trans_date) values (?, ?, curdate());";
-			$contRun = $db->prepare($contSQL);
-			$contRun->bind_param("si", $_POST['dev' . $x], $id);
-			$contRun->execute();
-			$contRun->close();
-		}
-	}
-}
-?>
-<?php
 if(isset($_POST['count']))
 {
 	for($y = 0;$_POST['count'] > $y; $y++)
@@ -224,7 +202,7 @@ while($closeRun->fetch())
 	if($cld == 1)
 	{
 		echo " <a href=\"../container_details/?id=" . $id . "&action=1\"> <button type=\"button\">Close This Container</button></a>";
-		echo "<br><br> <a href=\"../cont_add_device.php/?id=" . $id . "\"> <button type=\"button\">Add Devices</button></a>";
+		echo "<br><br> <a href=\"../cont_add_device.php/?id=" . $id . "\"> <button type=\"button\">Receive Devices</button></a>";
 		echo " <a href=\"../cont_add_hard_drive.php/?id=" .$id . "\"> <button type=\"button\">Receive Hard Drives</button></a>";
 	}
 }$closeRun->close();

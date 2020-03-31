@@ -11,7 +11,7 @@ $id = $_GET['id'];
 </head>
 
 <body>
-<form method="POST" action="../container_details.php/?id=<?php echo $id; ?>">
+<form method="POST" action="../cont_add_disp.php/?id=<?php echo $id; ?>">
 Select the devices model: <br>
 <select name="model">
 <?php
@@ -27,13 +27,26 @@ while($run->fetch())
 $run->close();
 ?>
 </select><br>
-Enter the device serial: <br>
+<table>
+<tr><th>Enter the device serial:</th>
+<?php
+if(isset($_POST['rec_hdd']))
+{
+	echo "<th>Enter the hard drive serial:</th>";
+}
+?></tr>
 <?php
 for($x = 0; $_POST['num'] > $x; $x++)
 {
-	echo "<input type=\"text\" name=\"dev" . $x . "\"><br>";
+	echo "</tr><td><input type=\"text\" name=\"dev" . $x . "\"></td>";
+	if(isset($_POST['rec_hdd']))
+	{
+		echo "<td><input type=\"text\" name=\"hdd" . $x . "\"></td>";
+	}
+	echo "</tr>";
 }
 ?>
+</table>
 <input type="hidden" value=<?php echo "\"" . $_POST['type'] . "\"" ?> name="type">
 <input type="hidden" value=<?php echo "\"" . $_POST['num'] . "\"" ?> name="num">
 <input type="submit">

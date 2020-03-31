@@ -28,6 +28,8 @@ while($run->fetch())
 $run->close();
 ?>
 </select><br>
+Check this box to receive hard drives: <br>
+<input type="checkbox" name="rec_hdd" value="true">
 <br><input type="submit">
 </table>
 </body>

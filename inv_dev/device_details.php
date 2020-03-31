@@ -1,8 +1,50 @@
 <?php
 require "db.php";
+require "db2.php";
 include_once("navbar2.html");
 $id = $_GET['id'];
 ?> 
+<?php
+if(isset($_POST['loc']))
+{
+	$up = "update device set disp_id = ?, location_id = ? where serial = ?;";
+	$upRun = $db->prepare($up);
+	$upRun->bind_param("iis", $_POST['disp'], $_POST['loc'], $id);
+	$upRun->execute();
+	$upRun->close();
+	
+	$report = "insert into report(location_id, report_date, comments) values (10, curdate(), 'Manual update from admin');";
+	$reRun = $db->prepare($report);
+	$reRun->execute();
+	$reRun->close();
+	
+	$selReport = "select id from report order by id desc limit 1;";
+	$selRun = $db->prepare($selReport);
+	$selRun->execute();
+	$selRun->bind_result($ri);
+	while($selRun->fetch())
+	{
+		$devReport = "insert into dev_report(dev_serial, report_id, purpose_id) values (?, ?, 1);";
+		$devRun = $db2->prepare($devReport);
+		$devRun->bind_param("si", $id, $ri);
+		$devRun->execute();
+		$devRun->close();
+	}
+	$selRun->close();
+	
+}
+?>
+<?php
+if(isset($_POST['cont']))
+{
+	$cont = "insert into dev_cont(dev_serial, cont_id, trans_date) values (?, ?, curdate());";
+	$cRun = $db->prepare($cont);
+	$cRun->bind_param("si", $id, $_POST['cont']);
+	$cRun->execute();
+	$cRun->close();
+	
+}
+?>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -13,23 +55,21 @@ $id = $_GET['id'];
 <body>
 <table>
 <?php
-$sql = "select serial, rec_date, grade, dev_type.name, model.name, station, disposition.name
-		from device, dev_condition, dev_type, model, location, disposition
+$sql = "select serial, rec_date, dev_type.name, model.name, station, disposition.name
+		from device, dev_type, model, location, disposition
 		where type_id = dev_type.id
 		and model_id = model.id
-		and condition_id = dev_condition.id
 		and location_id = location.id
 		and disp_id = disposition.id
 		and serial = ?;";
 $run = $db->prepare($sql);
 $run->bind_param("s", $id);
 $run->execute();
-$run->bind_result($s, $r, $g, $t, $m, $st, $d);
+$run->bind_result($s, $r, $t, $m, $st, $d);
 while($run->fetch())
 {
 	echo "<tr><th>Serial #</th><td>" . $s . "</td></tr>" .
 		 "<tr><th>Date Recieved</th><td>" . $r . "</td></tr>" .
-		 "<tr><th>Condition</th><td>" . $g . "</td></tr>" .
 		 "<tr><th>Device Type</th><td>" . $t . "</td></tr>" .
 		 "<tr><th>Model</th><td>" . $m . "</td></tr>" .
 		 "<tr><th>Location</th><td>" . $st . "</td></tr>" .
@@ -44,6 +84,7 @@ $pcRun->execute();
 $pcRun->store_result();
 $pcRun->bind_result($ram, $mod, $clo);
 if($pcRun->num_rows > 0)
+	
 {
 	while($pcRun->fetch())
 	{
@@ -107,6 +148,8 @@ $childRun->close();
 
 ?>
 </table>
+<br><a href="../loc_disp_update.php/?id=<?php echo $id; ?>"><button type="button">Change Location and Disposition</button></a>
+<a href="../container_update.php/?id=<?php echo $id; ?>"><button type="button">Transfer to Finished Container</button></a><br>
 <br><a href="../device_list.php"><button type="button">Back</button></a>
 </body>
 </html>

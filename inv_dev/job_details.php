@@ -89,6 +89,35 @@ while($tRun->fetch())
 }
 $tRun->close();
 ?>
+</table><br>
+<br>
+<h3>Devices recieved from this job</h3>
+<table>
+<tr><th>Device Serial</th><th>Location</th><th>Disposition</th><th>Date Received</th></tr>
+<?php
+$sql = "select distinct device.serial, station, disposition.name, dev_cont.trans_date
+from dev_cont, container, job_transfer, device, disposition, location
+where dev_cont.cont_id = container.id
+and job_transfer.cont_id = container.id
+and dev_cont.dev_serial = device.serial
+and device.disp_id = disposition.id
+and device.location_id = location.id
+and job_id = ?
+order by name;";
+$run = $db->prepare($sql);
+$run->bind_param("i", $id);
+$run->execute();
+$run->bind_result($dev, $sta, $disp, $date);
+while($run->fetch())
+{
+	echo "<tr><td><a href=\"../device_details.php/?id=" . $dev . "\">" . $dev .
+		 "</a></td><td>" . $sta . 
+		 "</td><td>" . $disp . 
+		 "</td><td>" . $date . 
+		 "</td></tr>";
+}
+$run->close();
+?>
 </table>
 <br><a href="../job_list.php"><button type="button">Back</button></a>
 <?php echo " <a href=\"../DPUL.php/?id=" . $id ."\"> <button type=\"button\">Create DPUL for this Job</button></a> "; ?>

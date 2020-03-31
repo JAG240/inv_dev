@@ -70,7 +70,7 @@ $cRun->execute();
 $cRun->bind_result($ci, $cm, $cs);
 while($cRun->fetch())
 {
-	echo "<option value=\"" . $id . "\">" . $cm . " @ " . $cs . "GHz" . "</option>";
+	echo "<option value=\"" . $ci . "\">" . $cm . " @ " . $cs . "GHz" . "</option>";
 }
 $cRun->close();
 
