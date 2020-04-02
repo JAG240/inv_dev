@@ -16,5 +16,7 @@ include_once("navbar.html");
 <a href="containers.php">Containers</a><br>
 <a href="devices.php">Devices</a><br>
 <a href="resale.php">Resale Room</a><br>
+<br>
+<a href="import.php"><button type="button">Import CRTL</button></a>
 </body>
 </html>
