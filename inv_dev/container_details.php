@@ -219,6 +219,7 @@ if($devch->num_rows > 0)
 }
 $devch->close();
 ?>
+<br><br><a href="../import.php/?id=<?php echo $id?>"><button type="button">Import CRTL</button></a>
 </body>
 </html>
 
