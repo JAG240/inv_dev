@@ -50,3 +50,15 @@ tr, th, td
 {
 	text-align: center;
 }
+.tableFormat th
+{
+	background: #e4f5e9;
+	border: 1px solid black;
+	border-collapse: collapse; 
+}
+
+.tableFormat tr:nth-child(odd)
+{
+	background: #dbf1ff;
+
+}
