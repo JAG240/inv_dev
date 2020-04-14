@@ -59,13 +59,13 @@ $run2->close();
 Enter container: <br>
 <select name="cont">
 <?php
-$sql3 = "select container.id, name from container, material where mat_id = material.id;";
+$sql3 = "select container.id, name from container, material where mat_id = material.id and container.disp_id = 1;";
 $run3 = $db->prepare($sql3);
 $run3->execute();
 $run3->bind_result($id, $na);
 while($run3->fetch())
 {
-	echo "<option value=\"" . $id . "\">" . $na . "</option>";
+	echo "<option value=\"" . $id . "\">". $id . " : " . $na . "</option>";
 }
 $run3->close();
 ?>

@@ -1,5 +1,6 @@
 <?php
 require "db.php";
+require "db2.php";
 include_once("navbar2.html");
 $id = $_GET['id'];
 ?> 
@@ -18,12 +19,10 @@ if(isset($_POST['loc']))
 			$run->execute();
 			$run->close();
 			
-			echo $_POST['dev'.$x] . "<br>";
-			
-			/*$run2 = $db->prepare($sql2);
+			$run2 = $db->prepare($sql2);
 			$run2->bind_param("si", $_POST['dev'.$x], $_POST['cont']);
 			$run2->execute();
-			$run2->close();*/
+			$run2->close();
 		}
 	}
 }
@@ -54,11 +53,24 @@ $dRun->execute();
 $dRun->bind_result($ds, $mn, $s, $di);
 while($dRun->fetch())
 {
-	echo "<tr><td><a href=\"../device_details.php/?id=" . $ds . "\">" . $ds . 
-		 "</a></td><td>" . $mn . 
-		 "</td><td>" . $s . 
-		 "</td><td>" . $di .
-		 "</td></tr>";
+	$check = "select cont_id from dev_cont where dev_serial = ? order by trans_date desc limit 1;";
+	$run2 = $db2->prepare($check);
+	$run2->bind_param("s", $ds);
+	$run2->execute();
+	$run2->bind_result($chk);
+	while($run2->fetch())
+	{
+		if($chk == $id)
+		{
+				echo "<tr><td><a href=\"../device_details.php/?id=" . $ds . "\">" . $ds . 
+				"</a></td><td>" . $mn . 
+				"</td><td>" . $s . 
+				"</td><td>" . $di .
+				"</td></tr>";
+		}
+	}
+	$run2->close();
+	
 }
 $dRun->close();
 ?>

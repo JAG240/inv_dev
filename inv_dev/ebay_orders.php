@@ -12,6 +12,7 @@ include_once("navbar.html");
 <body>
 <a href="order_report_import.php">Import Order Report</a><br>
 <a href="order_search.php">Order Search</a><br>
+<a href="order_dashboard.php">Order Dashboard</a><br>
 <br><a href="ebay.php"><button type="button">Back</button></a>
 </body>
 </html>
