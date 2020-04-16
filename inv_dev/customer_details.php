@@ -1,11 +1,26 @@
 <?php
 require "db.php";
 include_once("navbar2.html");
+session_start();
 ?>
 <?php
 $id = $_GET['id'];
 ?>
 <?php
+if(isset($_GET['action']) && $_GET['action'] == 1 && isset($_SESSION['clear']) && $_SESSION['clear'] == 0)
+{
+	$sql = "delete from customer where customer_id = ?;";
+	$run = $db->prepare($sql);
+	$run->bind_param("i", $id);
+	$run->execute();
+	$run->close();
+	
+	echo "  <link rel=\"stylesheet\" type=\"text/css\" href=\"../style.css\">";
+	echo "<h2 style=\"color:red\">Customer was deleted</h2>"; 
+	echo "<a href=\"../customer_list.php\"><button type=\"button\">Back</button></a>";
+}
+else
+{
 if(isset($_POST['cred_id']))
 {
 	$addCredSQL = "insert into cust_credit_ref(cust_id, credit_id) values (?, ?);";
@@ -108,6 +123,12 @@ if($dockRun->num_rows > 0)
 <br><a href="../customer_list.php"><button type="button">Customer List</button></a>
 <?php echo "<a href=\"../add_credit_ref.php/?id=" . $id ."\">" ?><button type="button">Add Credit Reference</button></a>
 <?php echo "<a href=\"../dock_contact_form.php/?id=" . $id . "\">" ?><button type="button">Add Dock Contact</button></a>
-
+<?php
+if(isset($_SESSION['clear']) && $_SESSION['clear'] == 0)
+{
+	echo "<br><br><a href=\"../customer_details.php/?id=" . $id . "&action=1\"><button type=\"button\">Delete this customer</button></a>";
+}
+}
+?>
 </body>
 </html>
