@@ -23,8 +23,9 @@ $addRun->close();
   <link rel="stylesheet" type="text/css" href="style.css">
   <title>Customer List</title>
 </head>
-<ul>
 <body>
+<table class="tableFormat">
+<tr><th>Customers</th></tr>
 <?php 
 
 $tableSQL = "Select customer_id, name
@@ -35,11 +36,11 @@ $tableRun->execute();
 $tableRun->bind_result($id, $name);
 while($tableRun->fetch())
 {
-	echo "<li><a href=\"customer_details.php/?id=" . $id . "\">" . $name . "</a></li>";
+	echo "<tr><td><a href=\"customer_details.php/?id=" . $id . "\">" . $name . "</a></td></tr>";
 }
 $tableRun->close();
 ?>
-</ul>
+</table>
 <a href="customer_form.php"><button type="button"> Add New Customer </button></a> 
 <a href="customer_import.php"><button type="button">Import New Customers</button></a><br>
 <br><a href="customers.php"><button type="button">Back</button></a>
