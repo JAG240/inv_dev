@@ -40,6 +40,8 @@ while($tableRun->fetch())
 $tableRun->close();
 ?>
 </ul>
-<a href="customer_form.php"><button type="button"> Add New Customer </button></a>
+<a href="customer_form.php"><button type="button"> Add New Customer </button></a> 
+<a href="customer_import.php"><button type="button">Import New Customers</button></a><br>
+<br><a href="customers.php"><button type="button">Back</button></a>
 </body>
 </html>

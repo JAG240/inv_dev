@@ -62,3 +62,15 @@ tr, th, td
 	background: #dbf1ff;
 
 }
+.bug li
+{
+	position: fixed;
+	width: 8%;
+	bottom: 10px;
+}
+
+.big
+{
+	height: 100px;
+	width: 30%;
+}

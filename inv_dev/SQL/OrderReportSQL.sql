@@ -11,7 +11,9 @@ username varchar(128) not null,
 address varchar(256) not null,
 city varchar(128),
 state varchar(2),
-zip varchar(12)
+zip varchar(12),
+email varchar(128),
+name varchar(64)
 )ENGINE=InnoDB;
 
 -- Total price is quantity * sold_price + ebay_tax -- No need to store in DB -- 

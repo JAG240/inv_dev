@@ -18,4 +18,7 @@ include_once("navbar.html");
 <a href="resale.php">Resale Activities</a><br>
 <br>
 </body>
+<?php
+include_once("footer_bug.html");
+?>
 </html>
