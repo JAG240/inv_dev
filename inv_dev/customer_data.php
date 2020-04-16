@@ -1,6 +1,8 @@
 <?php
 require "db.php";
 include_once("navbar.html");
+require_once("vendor/php-excel-reader/excel_reader2.php");
+require_once("vendor/SpreadsheetReader.php");
 ?>
 <html lang="en">
 <head>
@@ -21,6 +23,52 @@ if(isset($_POST['import']))
 		
 		$reader = new SpreadsheetReader($target);
 		$sheets = count($reader->sheets());
+		
+		$customer = array();
+		
+		echo "<table class=\"tableFormat\">";
+		echo "<tr><th>Name</th><th>Phone</th><th>Primary Contact</th><th>Fax</th><th>Address</th></tr>";
+		foreach($reader as $r)
+		{
+			if($r[2] == "Vendor"){}
+			else
+			{
+				
+				$name = preg_replace("/[- V]/", "", $r[2]);
+				$phone = intval(preg_replace("/[-]/", "", $r[23]));
+				$pri = $r[20];
+				$fax = intval(preg_replace("/[-]/", "", $r[24]));
+			
+				if(1 === preg_match("~[0-9]~", $r[11]))
+				{
+					$billAdd = $r[11];
+				}
+				else
+				{
+					$billAdd = $r[12];
+				}
+				
+				if($billAdd == $r[11])
+				{
+					$billCity = $r[12];
+				}
+				else
+				{
+					$billCity = $r[13];
+				}
+				
+				if($phone == 0 && $fax == 0 && empty($billAdd)){}
+				else{
+				echo "<tr><td>" . $name . "</td><td>" . $phone . "</td><td>" . $pri . "</td><td>" . $fax . "</td><td>" . $billAdd . ", " . $billCity . "</td></tr>";
+				
+				array_push($customer, array($name, $phone, $pri, $fax, $billAdd, $billCity));}
+			}
+		}
+		echo "</table>";
+		echo "<form method=\"POST\" action=\"customer_build.php\">";
+		echo "<input type=\"hidden\" name=\"customer\" value=\"" . htmlspecialchars(json_encode($customer)) . "\">";
+		echo "<input type=\"submit\"></form>";
+		
 	}
 	else
 	{

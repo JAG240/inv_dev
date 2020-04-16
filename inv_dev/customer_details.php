@@ -36,15 +36,14 @@ if(isset($_POST['d_name']))
 <table>
 <?php
 $detailSQL = "Select customer.customer_id, customer.name, customer.phone, customer.primary_contact, customer.website, customer.fax,
- customer.email, customer.referred, customer.billing_add, customer.physical_add, customer.city, customer.state, customer.zip, customer.po_box,
- customer.tax_exempt, customer.federal_tax, customer.duns, customer.start_date, company_type.comp_type
- from customer, company_type
- where customer.comp_type_id = company_type.id
- and customer_id = ?;";
+ customer.email, customer.referred, customer.billing_add, customer.physical_add, 
+ customer.tax_exempt, customer.federal_tax, customer.duns, customer.start_date
+ from customer
+ where customer_id = ?;";
 $detailRun = $db->prepare($detailSQL);
 $detailRun->bind_param("i", $id);
 $detailRun->execute();
-$detailRun->bind_result($i, $n, $p, $c, $w, $f, $e, $r, $b, $p, $ci, $st, $z, $po, $t, $fd, $dun, $sd, $ct);
+$detailRun->bind_result($i, $n, $p, $c, $w, $f, $e, $r, $b, $p, $t, $fd, $dun, $sd);
 while($detailRun->fetch())
 {
 	echo "<tr><th>ID: </th><td>" . $i . "</td></tr>" .
@@ -57,15 +56,10 @@ while($detailRun->fetch())
 		 "<tr><th>Referred By: </th><td>" . $r . "</td></tr>" . 
 		 "<tr><th>Billing Address: </th><td>" . $b . "</td></tr>" . 
 		 "<tr><th>Physical Address: </th><td>" . $p . "</td></tr>" . 
-		 "<tr><th>City: </th><td>" . $ci . "</td></tr>" . 
-		 "<tr><th>State: </th><td>" . $st . "</td></tr>" . 
-		 "<tr><th>Zip: </th><td>" . $z . "</td></tr>" . 
-		 "<tr><th>P.O. Box: </th><td>" . $po . "</th></tr>" . 
 		 "<tr><th>Tax Exempt #: </th><td>" . $t . "</th></tr>" . 
 		 "<tr><th>Federal Tax ID: </th><td>" . $fd . "</th></tr>" . 
 		 "<tr><th>DUNS #: </th><td>" . $dun . "</th></tr>" . 
-		 "<tr><th>Date Acquired: </th><td>" . $sd . "</td></tr>" . 
-		 "<tr><th>Company Type: </th><td>" . $ct . "</td></tr>";
+		 "<tr><th>Date Acquired: </th><td>" . $sd . "</td></tr>";
 }
 $detailRun->close();
 ?>

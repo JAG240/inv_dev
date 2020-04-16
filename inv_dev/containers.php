@@ -13,5 +13,6 @@ include_once("navbar.html");
 <a href="materials_list.php">Materials List</a><br>
 <a href="create_container.php">Create New Container</a><br>
 <a href="container_list.php">Container List</a><br>
+<a href="pack_import.php">Import Packing List</a><br>
 </body>
 </html>
