@@ -18,7 +18,7 @@ if(isset($_POST['submit']))
 	$orders = array();
 	
 	echo "<table class=\"tableFormat\"><tr><th>Order Number</th><th>Username</th><th>Buyer Name</th><th>Buyer Email</th><th>Buyer Address</th><th>Ship to Name</th><th>Ship to address</th><th>Item Number</th><th>Item Title</th><th>
-	Quantity</th><th>Sold Price</th><th>eBay Collected Tax</th><th>Total Price</th><th>PapPal Trans ID</th></tr>";
+	Quantity</th><th>Sold Price</th><th>eBay Collected Tax</th><th>Total Price</th><th>PayPal Trans ID</th></tr>";
 	if($_FILES['file']['size'] > 0)
 	{
 		$file = fopen($fileName, "r");

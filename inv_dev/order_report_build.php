@@ -19,11 +19,11 @@ $sql = "select id, name from ship_ser;";
 $buySQL = "select id from buyer where username = ?;";
 $x = 0;
 
-echo "<table class=\"tableFormat\"><tr><th>Order Number</th><th>Shipment Method</th><th>Shipping Cost</th><th>Tracking Number</th><th>Order has Additional Tracking</tr>";
+echo "<table class=\"tableFormat\"><tr><th>Ship to Name</th><th>Order Number</th><th>Shipment Method</th><th>Shipping Cost</th><th>Tracking Number</th><th>Order has Additional Tracking</tr>";
 echo "<form method=\"POST\" action=\"order_report_build.php\">";
 foreach($orders as $o)
 {	
-	echo "<tr><td>" . $o[0] . "</td><td><select name=\"m_ship" . $x . "\" required>";
+	echo "<tr><td>" . $o[8] . "</td><td>" . $o[0] . "</td><td><select name=\"m_ship" . $x . "\" required>";
 	
 	$run = $db->prepare($sql);
 	$run->execute();
@@ -73,7 +73,8 @@ foreach($orders as $o)
 	$run3->close();
 }
 
-} 
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 else
 {
 $x = 0;
@@ -124,13 +125,16 @@ foreach($orders as $o)
 	{
 		array_push($addTrack, $o);
 	}
+	$i++;
 }
-if(count($addTrack) != 0){echo "<table class=\"tableFormat\"><tr><th>Order Number</th><th>Shipment Method</th><th>Shipping Cost</th><th>Tracking Number</th><th>Order has Additional Tracking</tr>";}
+if(count($addTrack) != 0){echo "<table class=\"tableFormat\"><tr><th>Ship to Name</th><th>Order Number</th><th>Shipment Method</th><th>Shipping Cost</th><th>Tracking Number</th><th>Order has Additional Tracking</tr>";}
 echo "<form method=\"POST\" action=\"order_report_build.php\">";
+
+$x=0;
 
 foreach($addTrack as $t)
 {
-	echo "<tr><td>" . $t[0] . "</td><td><select name=\"m_ship" . $x . "\" required>";
+	echo "<tr><td>" . $t[8] . "</td><td>" . $t[0] . "</td><td><select name=\"m_ship" . $x . "\" required>";
 	
 	$run = $db->prepare($sql);
 	$run->execute();
@@ -148,7 +152,7 @@ foreach($addTrack as $t)
 }
 echo"</table>";
 echo "<input name=\"orders\" type=\"hidden\" value=\"" . htmlspecialchars(json_encode($orders)) . "\">";
-if(count($addTrack) != 0){echo "<input type=\"submit\" name=\"input\"></form>";}
+if(count($addTrack) != 0){echo "<input type=\"hidden\" name=\"addTrack\" value=\"" . htmlspecialchars(json_encode($addTrack)) . "\"><input type=\"submit\" name=\"input\"></form>";}
 else{echo "<a href=\"ebay_orders.php\"><button type=\"button\">Back to Orders</button></a>";}
 }
 ?>
