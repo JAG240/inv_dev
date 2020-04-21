@@ -13,37 +13,29 @@ include_once("navbar.html");
 
 <form method="post" action="customer_list.php">
 Company Name: <br>
-<input type="text" name="name" required><br>
+<input type="text" name="name"><br>
 Phone Number: <br>
-<input type="number" name="phone" required><br>
+<input type="number" name="phone"><br>
 Primary Contact: <br>
-<input type="text" name="contact" required><br>
+<input type="text" name="contact"><br>
 Website: <br>
 <input type="URL" name="website"><br>
 Fax: <br>
 <input type="number" name="fax"><br>
 Email: <br>
-<input type="email" name="mail" required><br>
+<input type="email" name="mail"><br>
 Referred by: <br>
 <input type="text" name="refer"><br>
 Billing Address: <br>
-<input type="text" name="billing" required><br>
+<input type="text" name="billing"><br>
 Physical Address: <br>
-<input type="text" name="physical" required><br>
-City: <br>
-<input type="text" name="city" required><br>
-State: <br>
-<select name="state" required>
-<option value="PA" selected>PA<option>
-</select><br>
-Zip Code: <br>
-<input type="number" name="zip" required><br>
+<input type="text" name="physical"><br>
 P.O. Box: <br>
 <input type="text" name="PO"><br>
 Tax Exempt Number: <br>
 <input type="number" name="tax"><br>
 Federal Tax ID: <br>
-<input type="number" name="fed" required><br>
+<input type="number" name="fed"><br>
 DUNS Number: <br>
 <input type="number" name="duns"><br>
 Company Type: <br>

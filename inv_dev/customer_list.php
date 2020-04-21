@@ -5,12 +5,11 @@ include_once("navbar.html");
 <?php
 if(isset($_POST['name']))
 {	
-	$addSQL = "insert into customer(name, phone, primary_contact, website, fax, email, referred, billing_add, physical_add, city, state, zip, po_box, tax_exempt, federal_tax, duns, start_date, comp_type_id) values
-	(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, curdate(), ?);";
+	$addSQL = "insert into customer(name, phone, primary_contact, website, fax, email, referred, billing_add, physical_add, po_box, tax_exempt, federal_tax, duns, start_date, comp_type_id) values
+	(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, curdate(), ?);";
 	$addRun = $db->prepare($addSQL);
-	$addRun->bind_param("sississssssisiiii", $_POST['name'], $_POST['phone'], $_POST['contact'], $_POST['website'],
- $_POST['fax'], $_POST['mail'], $_POST['refer'], $_POST['billing'], $_POST['physical'], $_POST['city'], $_POST['state'],
- $_POST['zip'], $_POST['PO'], $_POST['tax'], $_POST['fed'], $_POST['duns'], $_POST['type']);
+	$addRun->bind_param("sississsssiiii", $_POST['name'], $_POST['phone'], $_POST['contact'], $_POST['website'],
+ $_POST['fax'], $_POST['mail'], $_POST['refer'], $_POST['billing'], $_POST['physical'], $_POST['PO'], $_POST['tax'], $_POST['fed'], $_POST['duns'], $_POST['type']);
 $addRun->execute();
 $addRun->store_result();
 $addRun->close();
