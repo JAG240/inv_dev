@@ -1,1 +1,0 @@
-insert into ship_ser(name) values ("FedEx Home Delivery"), ("FedEx Ground"), ("USPS Priority Mail"), ("USPS First Class Package");
